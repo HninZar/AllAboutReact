@@ -1,37 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import * as React from 'react';
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
+import * as React from "react";
 
 function App() {
-  const emailRef = React.useRef();
-  const passwordRef = React.useRef();
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
-  const handleSubmit = (e) =>{
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    const email = emailRef.current.value;
-    const password = passwordRef.current.value;
-
-    alert(email + ' ' + password)
-  }
+    alert(email + " " + password);
+  };
 
   return (
     <>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor='email'>Email</label>
-          <input id="email" type="text" ref={emailRef}/>
+          <label htmlFor="email">Email</label>
+          <input id="email" type="text" onChange={handleEmail} value={email} />
         </div>
         <div>
-          <label htmlFor='password'>Password</label>
-          <input id="password" type="password" ref={passwordRef}/>
+          <label htmlFor="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            onChange={handlePassword}
+            value={password}
+          />
         </div>
         <button type="submit">Submit</button>
       </form>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
