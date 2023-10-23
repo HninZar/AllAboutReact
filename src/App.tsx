@@ -1,106 +1,44 @@
-import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import "./App.css";
-import * as React from "react";
 
-const INITIAL_STATE = {
-  email: "",
-  password: "",
-};
-
-type InitState = {
-  email: string;
-  password: string
+interface FormInput {
+  Username: string;
+  Password: number;
 }
 
-const VALIDATION = {
-  email: [
-    {
-      isValid: (value:unknown) => !!value,
-      message: 'Is required.',
-    },
-    {
-      isValid: (value:string) => /\S+@\S+\.\S+/.test(value),
-      message: 'Needs to be an email.',
-    },
-  ],
-  password: [
-    {
-      isValid: (value:string) => !!value,
-      message: 'Is required.',
-    },
-  ],
-};
-
-const getErrorFields = (form:InitState) =>
-  Object.keys(form).reduce((acc, key) => {
-
-    if (!VALIDATION[key]) return acc;
-
-    const errorsPerField = VALIDATION[key]
-
-      .map((validation) => ({
-        isValid: validation.isValid(form[key]),
-        message: validation.message,
-      }))
-      // only keep the errors
-      .filter((errorPerField) => !errorPerField.isValid);
-
-    return { ...acc, [key]: errorsPerField };
-  }, {});
-
-const getDirtyFields = (form) => Object.keys(form).reduce((acc,key) => {
-  const isDirty = form[key] !== INITIAL_STATE[key];
-  return {...acc, [key]: isDirty};
-}, {});
-
-function App({ onLogin }) {
-  const [form, setForm] = React.useState(INITIAL_STATE);
-
-  const dirtyFields = getDirtyFields(form);
-  const errorFields = getErrorFields(form);
-  console.log(errorFields);
-  const hasChanges = Object.values(dirtyFields).every(
-    (isDirty) => !isDirty
-  );
-
-  const handleChange = (e:unknown) => {
-    setForm({
-      ...form,
-      [e.target.id]: e.target.value,
-    });
-  };
-
-  const handleSubmit = (e:unknown) => {
-    e.preventDefault();
-
-    alert(form.email + " " + form.password);
-    
-    const hasErrors = Object.values(errorFields).flat().length > 0;
-    if (hasErrors) return;
-  };
+function App() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormInput>();
+  const onSubmit: SubmitHandler<FormInput> = (data) => console.log(data);
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="text"
-            onChange={handleChange}
-            value={form.email}
-          />
+          <label htmlFor="Username">Username</label>
+          <input {...register("Username", { required: true })} />
+          {errors.Username && <p role="alert">Required Field</p>}
         </div>
         <div>
           <label htmlFor="password">Password</label>
           <input
-            id="password"
-            type="password"
-            onChange={handleChange}
-            value={form.password}
+            {...register("Password", {
+              required: true,
+              pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+            })}
+            type="text"
           />
+          {errors.Password && (
+            <p role="alert">
+              Required, Minimum eight characters, at least one letter and one
+              number:
+            </p>
+          )}
         </div>
-        <button disabled={hasChanges} type="submit">Submit</button>
+        <button type="submit">Submit</button>
       </form>
     </>
   );
