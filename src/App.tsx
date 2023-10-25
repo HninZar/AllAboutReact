@@ -12,6 +12,7 @@ function App() {
     handleSubmit,
     formState: { errors },
   } = useForm<FormInput>();
+
   const onSubmit: SubmitHandler<FormInput> = (data) => console.log(data);
 
   return (
