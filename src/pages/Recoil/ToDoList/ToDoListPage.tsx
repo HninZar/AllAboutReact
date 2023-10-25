@@ -7,11 +7,10 @@ export default function ToDoListPage() {
         <li>Router</li>
         <li>Recoil</li>
         <li>API call</li>
-        <li>axios</li>
         <li>firebase</li>
         <li>framer-motion</li>
         <li>lodash</li>
-        <li>Localization</li>
+        <li>hooks</li>
       </ul>
       <h1 className="text-gray-900 ">Make Sure</h1>
       <ul>
