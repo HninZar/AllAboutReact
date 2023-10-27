@@ -4,6 +4,7 @@ import "./styles/index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import LoginPage from "./pages/ReactHookForm/Login/LoginPage";
 import ToDoListPage from "./pages/Recoil/ToDoList/ToDoListPage";
+import UseEffectPage from "./pages/ReactHook/UseEffectPage";
 
 const router = createBrowserRouter([
   {
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
   {
     path: "/todolist",
     element: <ToDoListPage />,
+  },
+  {
+    path: "/react-hook",
+    element: <UseEffectPage />,
   },
 ]);
 
