@@ -1,35 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { SubmitHandler, useForm } from "react-hook-form";
+import "./App.css";
+
+interface FormInput {
+  Username: string;
+  Password: number;
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormInput>();
+
+  const onSubmit: SubmitHandler<FormInput> = (data) => console.log(data);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <label htmlFor="Username">Username</label>
+          <input {...register("Username", { required: true })} />
+          {errors.Username && <p role="alert">Required Field</p>}
+        </div>
+        <div>
+          <label htmlFor="password">Password</label>
+          <input
+            {...register("Password", {
+              required: true,
+              pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+            })}
+            type="text"
+          />
+          {errors.Password && (
+            <p role="alert">
+              Required, Minimum eight characters, at least one letter and one
+              number:
+            </p>
+          )}
+        </div>
+        <button type="submit">Submit</button>
+      </form>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
